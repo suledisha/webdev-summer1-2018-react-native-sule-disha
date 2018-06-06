@@ -10,6 +10,8 @@ import ExamEditor from './elements/ExamEditor'
 import QuestionList from './components/QuestionList'
 import MultipleChoiceQuestionEditor from './elements/MultipleChoiceQuestionEditor'
 import TrueFalseQuestionEditor from './elements/TrueFalseQuestionEditor'
+import EssayQuestionEditor from './elements/EssayQuestionEditor'
+import FillInTheBlanksQuestionEditor from './elements/FillInTheBlanksQuestionEditor'
 class Home extends React.Component {
     static navigationOptions = {
         title: 'Home'
@@ -39,7 +41,9 @@ WidgetList,
 ExamEditor,
 QuestionList,
 TrueFalseQuestionEditor,
-MultipleChoiceQuestionEditor
+MultipleChoiceQuestionEditor,
+EssayQuestionEditor,
+FillInTheBlanksQuestionEditor
  });
 
 export default App;
