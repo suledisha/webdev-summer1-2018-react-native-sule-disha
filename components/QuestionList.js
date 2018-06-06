@@ -27,19 +27,19 @@ class QuestionList extends Component {
                             onPress={() => {
                                 if(question.type === "TrueFalse")
                                     this.props.navigation
-                                        .navigate("TrueFalseQuestionEditor", {questionId: question.id})
+                                        .navigate("TrueFalseQuestionEditor", {question: question})
                                 if(question.type === "MultipleChoice")
                                     this.props.navigation
-                                        .navigate("MultipleChoiceQuestionEditor", {questionId: question.id})
+                                        .navigate("MultipleChoiceQuestionEditor", {question: question})
                                 if(question.type === "Essay")
                                     this.props.navigation
-                                        .navigate("EssayQuestionEditor", {questionId: question.id})
+                                        .navigate("EssayQuestionEditor", {question: question})
                                 if(question.type === "FillInBlanks")
                                     this.props.navigation
-                                        .navigate("FillInTheBlanksQuestionEditor", {questionId: question.id})
+                                        .navigate("FillInTheBlanksQuestionEditor", {question: question})
                             }}
                             key={index}
-                            subtitle={question.description}
+                            subtitle={question.subtitle}
                             title={question.title}/>))}
             </View>
         )

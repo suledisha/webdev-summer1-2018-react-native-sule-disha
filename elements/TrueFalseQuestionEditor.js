@@ -3,26 +3,52 @@ import {View} from 'react-native'
 import {Text, Button, CheckBox} from 'react-native-elements'
 import {FormLabel, FormInput, FormValidationMessage}
   from 'react-native-elements'
+import TrueFalseService from "../services/TrueFalseService"
 
 class TrueFalseQuestionEditor extends React.Component {
   static navigationOptions = { title: "True False"}
   constructor(props) {
     super(props)
     this.state = {
+      question:'',
       title: '',
-      description: '',
+      subtitle: '',
       points: 0,
-      isTrue: true
+      isTrue: false
     }
+     this.updateQuestion=this.updateQuestion.bind(this);
+     this.TrueFalseService=TrueFalseService.instance;
   }
+
+  componentDidMount() {
+          const question = this.props.navigation.getParam("question");
+          this.setState({
+                      question: question,
+                      title: question.title,
+                      subtitle: question.subtitle,
+                      points: question.points,
+                      isTrue: question.isTrue
+                  })
+          }
   updateForm(newState) {
     this.setState(newState)
+  }
+
+  updateQuestion(){
+    let newQuestion={
+                title: this.state.title,
+                subtitle: this.state.subtitle,
+                points: this.state.points,
+                isTrue: this.state.isTrue,
+    }
+    this.TrueFalseService.updateTrueFalseQuestion(this.state.question.id, newQuestion)
+
   }
   render() {
     return(
       <View>
         <FormLabel>Title</FormLabel>
-        <FormInput onChangeText={
+        <FormInput value={this.state.title} onChangeText={
           text => this.updateForm({title: text})
         }/>
         <FormValidationMessage>
@@ -30,8 +56,8 @@ class TrueFalseQuestionEditor extends React.Component {
         </FormValidationMessage>
 
         <FormLabel>Description</FormLabel>
-        <FormInput onChangeText={
-          text => this.updateForm({description: text})
+        <FormInput value={this.state.subtitle} onChangeText={
+          text => this.updateForm({subtitle: text})
         }/>
         <FormValidationMessage>
           Description is required
@@ -41,6 +67,7 @@ class TrueFalseQuestionEditor extends React.Component {
                   checked={this.state.isTrue} title='The answer is true'/>
 
         <Button	backgroundColor="green"
+                 onPress={()=>this.updateQuestion()}
                  color="white"
                  title="Save"/>
         <Button	backgroundColor="red"
@@ -49,7 +76,7 @@ class TrueFalseQuestionEditor extends React.Component {
 
         <Text h3>Preview</Text>
         <Text h2>{this.state.title}</Text>
-        <Text>{this.state.description}</Text>
+        <Text>{this.state.subtitle}</Text>
 
       </View>
     )

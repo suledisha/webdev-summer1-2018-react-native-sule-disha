@@ -31,7 +31,7 @@ export default class TrueFalseService {
         })
     }
 
-    updateTrueFalseQuestion(newTFQuestion, questionId){
+    updateTrueFalseQuestion(questionId, newTFQuestion){
         return fetch(TFQUESTION_URL2.replace('TFID',questionId), {
             method: 'PUT',
             body: JSON.stringify(newTFQuestion),

@@ -1,26 +1,51 @@
 import React from 'react'
-import {View} from 'react-native'
+import {View, Alert} from 'react-native'
 import {Text, Button, CheckBox} from 'react-native-elements'
 import {FormLabel, FormInput, FormValidationMessage}
     from 'react-native-elements'
+import EssayService from "../services/EssayService"
+
 class EssayQuestionEditor extends React.Component {
     static navigationOptions = { title: "Essay"}
     constructor(props) {
         super(props)
         this.state = {
+            question:'',
             title: '',
-            description: '',
+            subtitle: '',
             points: 0
         }
+        this.updateQuestion=this.updateQuestion.bind(this);
+        this.essayService=EssayService.instance;
+    }
+
+    componentDidMount() {
+        const question = this.props.navigation.getParam("question");
+        this.setState({
+            question: question,
+            title: question.title,
+            subtitle: question.subtitle,
+            points: question.points,
+        })
     }
     updateForm(newState) {
         this.setState(newState)
+    }
+    updateQuestion(){
+        //Alert.alert("In updateQuestion")
+        let newQuestion={
+            title: this.state.title,
+            subtitle: this.state.subtitle,
+            points: this.state.points
+        }
+        this.essayService.updateEssayQuestion(this.state.question.id, newQuestion)
+
     }
     render() {
         return(
             <View>
                 <FormLabel>Title</FormLabel>
-                <FormInput onChangeText={
+                <FormInput value={this.state.title} onChangeText={
                     text => this.updateForm({title: text})
                 }/>
                 <FormValidationMessage>
@@ -28,14 +53,16 @@ class EssayQuestionEditor extends React.Component {
                 </FormValidationMessage>
 
                 <FormLabel>Description</FormLabel>
-                <FormInput onChangeText={
-                    text => this.updateForm({description: text})
+                <FormInput value={this.state.subtitle} onChangeText={
+                    text => this.updateForm({subtitle: text})
                 }/>
                 <FormValidationMessage>
                     Description is required
                 </FormValidationMessage>
 
+
                 <Button	backgroundColor="green"
+                           onPress={()=>this.updateQuestion()}
                            color="white"
                            title="Save"/>
                 <Button	backgroundColor="red"
@@ -44,8 +71,7 @@ class EssayQuestionEditor extends React.Component {
 
                 <Text h3>Preview</Text>
                 <Text h2>{this.state.title}</Text>
-                <Text>{this.state.description}</Text>
-
+                <Text>{this.state.subtitle}</Text>
             </View>
         )
     }

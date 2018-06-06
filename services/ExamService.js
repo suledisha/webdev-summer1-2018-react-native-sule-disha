@@ -1,4 +1,5 @@
 import 'es6-symbol/implement';
+import {View, Alert} from 'react-native'
 let _singleton=Symbol();
 const EXAM_API_URL = 'http://10.0.0.210:8080/api/lesson/LID/exam';
 const EXAM_API_URL2 = 'http://10.0.0.210:8080/api/exam/EID';

@@ -31,7 +31,7 @@ export default class MultipleChoiceService {
         })
     }
 
-    updateMCQuestion(newMCQuestion, questionId){
+    updateMCQuestion(questionId, newMCQuestion){
         return fetch(MCQUESTION_URL2.replace('MCID',questionId), {
             method: 'PUT',
             body: JSON.stringify(newMCQuestion),

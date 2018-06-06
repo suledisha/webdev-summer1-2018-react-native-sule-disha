@@ -35,7 +35,7 @@ export default class FillInTheBlankService {
         })
     }
 
-    updateFBQuestion(newFBQuestion, questionId){
+    updateFBQuestion(questionId, newFBQuestion){
         return fetch(FBQUESTION_URL2.replace('FBID',questionId), {
             method: 'PUT',
             body: JSON.stringify(newFBQuestion),

@@ -33,7 +33,7 @@ export default class EssayService {
         })
     }
 
-    updateEssayQuestion(newEQuestion, questionId){
+    updateEssayQuestion(questionId, newEQuestion){
         return fetch(EQUESTION_URL2.replace('essayID',questionId), {
             method: 'PUT',
             body: JSON.stringify(newEQuestion),
