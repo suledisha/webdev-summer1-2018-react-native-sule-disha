@@ -1,5 +1,5 @@
 import React from 'react'
-import {View} from 'react-native'
+import {View, Alert, TextInput, ScrollView, Switch} from 'react-native'
 import {Text, Button, CheckBox} from 'react-native-elements'
 import {FormLabel, FormInput, FormValidationMessage}
     from 'react-native-elements'
@@ -16,7 +16,8 @@ class MultipleChoiceQuestionEditor extends React.Component {
             subtitle: '',
             points: 0,
             options: '',
-            correctOption:''
+            correctOption:'',
+            preview:false
         }
         this.updateQuestion=this.updateQuestion.bind(this);
         this.multipleChoiceService=MultipleChoiceService.instance;
@@ -46,11 +47,18 @@ class MultipleChoiceQuestionEditor extends React.Component {
             correctOption: this.state.correctOption
         }
         this.multipleChoiceService.updateMCQuestion(this.state.question.id, newQuestion)
+            .then(Alert.alert("Multiple Choice Question Updated"))
 
     }
     render() {
         return(
-            <View>
+            <ScrollView style={{padding:20}}>
+                <Text>Preview</Text>
+                <Switch
+                    onValueChange = {value => this.updateForm({preview: value})}
+                    value = {this.state.preview}/>
+
+                {!this.state.preview && <ScrollView>
                 <FormLabel>Title</FormLabel>
                 <FormInput value={this.state.title} onChangeText={
                     text => this.updateForm({title: text})
@@ -68,13 +76,19 @@ class MultipleChoiceQuestionEditor extends React.Component {
                 </FormValidationMessage>
 
 
-                <FormLabel>Choices</FormLabel>
+                <FormLabel>Points</FormLabel>
+                <FormInput value={this.state.points.toString()} onChangeText={
+                    text => this.updateForm({points: text})
+                }/>
+
+
+                    <FormLabel>Choices</FormLabel>
                 <FormInput value={this.state.choices} onChangeText={
                     text => this.updateForm({options: text})
                 }/>
 
                 <FormLabel>Correct Option</FormLabel>
-                <FormInput value={this.state.correctOption} onChangeText={
+                <FormInput value={this.state.correctOption.toString()} onChangeText={
                     text => this.updateForm({correctOption: text})
                 }/>
 
@@ -85,13 +99,15 @@ class MultipleChoiceQuestionEditor extends React.Component {
                 <Button	backgroundColor="red"
                            color="white"
                            title="Cancel"/>
-
+                </ScrollView>}
+                <View>
                 <Text h3>Preview</Text>
                 <Text h2>{this.state.title}</Text>
                 <Text>{this.state.subtitle}</Text>
 
 
             </View>
+            </ScrollView>
         )
     }
 }

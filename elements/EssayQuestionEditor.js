@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Alert} from 'react-native'
+import {View, Alert, TextInput, ScrollView, Switch} from 'react-native'
 import {Text, Button, CheckBox} from 'react-native-elements'
 import {FormLabel, FormInput, FormValidationMessage}
     from 'react-native-elements'
@@ -13,7 +13,8 @@ class EssayQuestionEditor extends React.Component {
             question:'',
             title: '',
             subtitle: '',
-            points: 0
+            points: 0,
+            preview:false
         }
         this.updateQuestion=this.updateQuestion.bind(this);
         this.essayService=EssayService.instance;
@@ -39,12 +40,19 @@ class EssayQuestionEditor extends React.Component {
             points: this.state.points
         }
         this.essayService.updateEssayQuestion(this.state.question.id, newQuestion)
+            .then(Alert.alert("Essay Question Updated"))
 
     }
     render() {
         return(
-            <View>
-                <FormLabel>Title</FormLabel>
+            <ScrollView style={{padding:20}}>
+                <Text>Preview</Text>
+                <Switch
+                    onValueChange = {value => this.updateForm({preview: value})}
+                    value = {this.state.preview}/>
+
+                {!this.state.preview && <ScrollView>
+            <FormLabel>Title</FormLabel>
                 <FormInput value={this.state.title} onChangeText={
                     text => this.updateForm({title: text})
                 }/>
@@ -60,6 +68,10 @@ class EssayQuestionEditor extends React.Component {
                     Description is required
                 </FormValidationMessage>
 
+                <FormLabel>Points</FormLabel>
+                <FormInput value={this.state.points.toString()} onChangeText={
+                    text => this.updateForm({points: text})
+                }/>
 
                 <Button	backgroundColor="green"
                            onPress={()=>this.updateQuestion()}
@@ -68,11 +80,25 @@ class EssayQuestionEditor extends React.Component {
                 <Button	backgroundColor="red"
                            color="white"
                            title="Cancel"/>
-
+            </ScrollView>}
+                <View>
                 <Text h3>Preview</Text>
                 <Text h2>{this.state.title}</Text>
                 <Text>{this.state.subtitle}</Text>
-            </View>
+                <Text>{this.state.points}</Text>
+                <TextInput     multiline={true}
+                               numberOfLines={5}
+                               style={{ borderColor: 'gray', borderWidth: 1}}
+                           value="Write Essay here!"/>
+                    <Button	backgroundColor="red"
+                               color="white"
+                               title="Cancel"/>
+                    <Button	backgroundColor="blue"
+                               color="white"
+                               title="Submit"/>
+
+                </View>
+            </ScrollView>
         )
     }
 }
