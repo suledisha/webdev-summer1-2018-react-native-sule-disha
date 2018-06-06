@@ -7,7 +7,9 @@ import ModuleList from './components/ModuleList'
 import LessonList from './components/LessonList'
 import WidgetList from './components/WidgetList'
 import ExamEditor from './elements/ExamEditor'
-
+import QuestionList from './components/QuestionList'
+import MultipleChoiceQuestionEditor from './elements/MultipleChoiceQuestionEditor'
+import TrueFalseQuestionEditor from './elements/TrueFalseQuestionEditor'
 class Home extends React.Component {
     static navigationOptions = {
         title: 'Home'
@@ -35,6 +37,9 @@ ModuleList,
 LessonList,
 WidgetList,
 ExamEditor,
+QuestionList,
+TrueFalseQuestionEditor,
+MultipleChoiceQuestionEditor
  });
 
 export default App;
