@@ -42,14 +42,14 @@ export default class ExamService {
 
         })}
 
-    /**
-    deleteModule(moduleId) {
-        return fetch(MODULE_API_URL2.replace
-        ('MODULE_ID', moduleId), {
+
+    deleteExam(examId) {
+        return fetch(EXAM_API_URL2.replace('EID',examId), {
             method: 'delete'
         })
     }
 
+    /**
 
     findAllModulesForCourse(courseId) {
         return fetch(

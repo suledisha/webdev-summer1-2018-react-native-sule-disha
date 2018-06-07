@@ -35,4 +35,10 @@ export default class AssignmentService {
             }
 
         })}
+
+        deleteAssignment(aId) {
+            return fetch(ASSIGN_URL2.replace('AID',aId), {
+                method: 'delete'
+            })
+        }
 }

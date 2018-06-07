@@ -3,6 +3,7 @@ import {ScrollView, View, Alert} from 'react-native'
 import {Text, ListItem, Button} from 'react-native-elements'
 import ExamService from "../services/ExamService"
 import AssignmentService from "../services/AssignmentService"
+import { Icon } from 'react-native-elements'
 
 class WidgetList extends Component {
     static navigationOptions = {title: 'Widgets'}
@@ -16,6 +17,9 @@ class WidgetList extends Component {
             lessonId: ''
         }
         this.addExam=this.addExam.bind(this)
+        this.addAssignment=this.addAssignment.bind(this)
+        this.deleteExam=this.deleteExam.bind(this)
+        this.deleteAssignment=this.deleteAssignment.bind(this)
         this.examService = ExamService.instance;
         this.assignmentService=AssignmentService.instance;
     }
@@ -34,12 +38,32 @@ class WidgetList extends Component {
                 .then(exams => this.setState({exams: exams}))))
     }
 
+    deleteExam(examId){
+        this.examService.deleteExam(examId)
+            .then(response => (response.json()))
+            .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/exam")
+                .then(response => (response.json()).catch((function(error) {
+                    console.log(error.message)})))
+                .then(exams => this.setState({exams: exams}))))
+
+    }
+
     addAssignment(){
         let newAssignment={
             title:"New Assignment",
             name:"New Assignment"
         }
         this.assignmentService.createAssignment(this.state.lessonId,newAssignment)
+            .then(response => (response.json()))
+            .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/assignment")
+                .then(response => (response.json()).catch((function(error) {
+                    console.log(error.message)})))
+                .then(assignments => this.setState({assignments: assignments}))))
+
+    }
+
+    deleteAssignment(assignmentId){
+        this.assignmentService.deleteAssignment(assignmentId)
             .then(response => (response.json()))
             .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/assignment")
                 .then(response => (response.json()).catch((function(error) {
@@ -71,7 +95,9 @@ class WidgetList extends Component {
                                 this.props.navigation
                                     .navigate("ExamEditor", {examId: exam.id, title:exam.title, name:exam.name})}
                             key={index}
-                            title={exam.name}/>))}
+                            title={exam.name}
+                            rightIcon={<Icon name='delete'
+                                onPress={() => this.deleteExam(exam.id)}/>}/>))}
                 {this.state.assignments.map(
                     (assignment, index) => (
                         <ListItem
@@ -79,7 +105,9 @@ class WidgetList extends Component {
                                 this.props.navigation
                                     .navigate("AssignmentEditor", {assignment : assignment})}
                             key={index}
-                            title={assignment.title}/>))}
+                            title={assignment.title}
+                            rightIcon={<Icon name='delete'
+                                             onPress={() => this.deleteAssignment(assignment.id)}/>}/>))}
                 <Button	backgroundColor="blue"
                            onPress={()=>this.addExam()}
                            color="white"
