@@ -4,6 +4,7 @@ import {Text, Button, CheckBox} from 'react-native-elements'
 import {FormLabel, FormInput, FormValidationMessage}
     from 'react-native-elements'
 import AssignmentService from "../services/AssignmentService"
+import FilePickerManager from 'react-native-file-picker';
 
 
 class AssignmentEditor extends React.Component {
@@ -17,6 +18,7 @@ class AssignmentEditor extends React.Component {
             title: '',
             description: '',
             points: 0,
+            widgetType:'Assignment',
             preview: false
         }
         this.updateAssignment=this.updateAssignment.bind(this);
@@ -44,8 +46,12 @@ class AssignmentEditor extends React.Component {
             description: this.state.description,
             points: this.state.points
         }
-        this.assignmentService.updateAssignment(this.state.assignment.id, newAssignment)
-            .then(Alert.alert("Assignment Updated"))
+        this.assignmentService.updateAssignment(this.state.assignment.id, newAssignment).catch(function(error) {
+            console.log(error.message);
+        }).then(Alert.alert("Assignment Updated"))
+            .then(()=>this.props.navigation.state.params.refresh())
+            .then(()=>this.props.navigation.goBack())
+
     }
 
     render() {
@@ -82,22 +88,33 @@ class AssignmentEditor extends React.Component {
                                onPress={()=>this.updateAssignment()}
                                color="white"
                                title="Save"/>
+                    <Text>{"\n"}</Text>
                     <Button	backgroundColor="red"
                                color="white"
                                title="Cancel"/>
                 </ScrollView>}
                 <View>
+                    <Text>{"\n"}</Text>
                     <Text h3>Preview</Text>
+                    <Text>{"\n"}</Text>
                     <Text h2>{this.state.title}</Text>
+                    <Text>{"\n"}</Text>
                     <Text>{this.state.subtitle}</Text>
-                    <Text>{this.state.points}</Text>
+                    <Text>{"\n"}</Text>
+                    <Text>Points {this.state.points}</Text>
+                    <Text>{"\n"}</Text>
                     <TextInput     multiline={true}
                                    numberOfLines={5}
                                    style={{ borderColor: 'gray', borderWidth: 1}}
                                    value="Write Assignment here!"/>
+                    <Text>{"\n"}</Text>
+                    <TextInput value="Submit Link here!"/>
+                    <Text>{"\n"}</Text>
+
                     <Button	backgroundColor="red"
                                color="white"
                                title="Cancel"/>
+                    <Text>{"\n"}</Text>
                     <Button	backgroundColor="blue"
                                color="white"
                                title="Submit"/>

@@ -13,6 +13,7 @@ import TrueFalseQuestionEditor from './elements/TrueFalseQuestionEditor'
 import EssayQuestionEditor from './elements/EssayQuestionEditor'
 import FillInTheBlanksQuestionEditor from './elements/FillInTheBlanksQuestionEditor'
 import AssignmentEditor from './elements/AssignmentEditor'
+import FixedHeader from './elements/FixedHeader'
 class Home extends React.Component {
     static navigationOptions = {
         title: 'Home'
@@ -24,8 +25,10 @@ class Home extends React.Component {
         return(
             <ScrollView>
                 <StatusBar barStyle="light-content"/>
-                <Text>Welcome</Text>
+                <FixedHeader/>
                 <Button title="Courses"
+                        backgroundColor="blue"
+                        color="white"
                         onPress={() => this.props.navigation
                             .navigate('CourseList') } />
             </ScrollView>

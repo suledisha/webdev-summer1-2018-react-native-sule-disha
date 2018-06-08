@@ -17,7 +17,8 @@ class ExamEditor extends React.Component {
             title: '',
             name:'',
             examId:'',
-            questionType: 0
+            widgetType:'Exam',
+            questionType: 'Essay'
         }
         this.examService = ExamService.instance;
         this.questionService=QuestionService.instance;
@@ -33,12 +34,19 @@ class ExamEditor extends React.Component {
         let newExam={
             name:this.state.name
         }
-        this.examService.updateExam(this.state.examId,newExam)
+        this.examService.updateExam(this.state.examId,newExam).catch(function(error) {
+            console.log(error.message);}).
+            then(Alert.alert("Exam Updated"))
+            .then(()=>this.props.navigation.state.params.refresh())
+            .then(()=>this.props.navigation.goBack())
     }
 
     addQuestion(questionType){
-        this.questionService.addQuestion(questionType, this.state.examId);
-
+        this.questionService.addQuestion(questionType, this.state.examId).catch(function(error) {
+            console.log(error.message);}).
+        then(Alert.alert("New Question Added in Question List"))
+            .then(()=>this.props.navigation.state.params.refresh())
+            //.then(()=>this.props.navigation.navigate("QuestionList", {examId: this.state.examId}))
     }
 
     componentDidMount() {
@@ -55,24 +63,23 @@ class ExamEditor extends React.Component {
     render() {
         return (
             <View>
-                <Text>{this.state.examId}</Text>
-
                 <FormLabel>Name</FormLabel>
                 <FormInput  onChangeText={
                     text => this.updateForm({name: text})
                 } value={this.state.name}/>
-
+                <Text>{"\n"}</Text>
                 <Button	backgroundColor="green"
                            onPress={()=>this.updateExam()}
                            color="white"
                            title="Save"/>
-
+                <Text>{"\n"}</Text>
                 <Button	backgroundColor="blue"
                            onPress={() => this.props.navigation
                                .navigate("QuestionList", {examId: this.state.examId})}
                            color="white"
                            title="Question List"/>
-                <Text>Add New Question</Text>
+                <Text>{"\n"}</Text>
+                <Text h3>Select Question Type and add a new question</Text>
                 <Picker
                     onValueChange={(itemValue, itemIndex) =>
                         this.setState({questionType: itemValue})}

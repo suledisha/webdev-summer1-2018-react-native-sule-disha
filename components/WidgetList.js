@@ -20,55 +20,68 @@ class WidgetList extends Component {
         this.addAssignment=this.addAssignment.bind(this)
         this.deleteExam=this.deleteExam.bind(this)
         this.deleteAssignment=this.deleteAssignment.bind(this)
+        this.refreshFunction=this.refreshFunction.bind(this)
         this.examService = ExamService.instance;
         this.assignmentService=AssignmentService.instance;
+    }
+
+    refreshFunction(){
+        const lessonId = this.state.lessonId
+        fetch("http://10.0.0.210:8080/api/lesson/"+lessonId+"/exam")
+            .then(response => (response.json()))
+            .then(exams => this.setState({exams}))
+
+        fetch("http://10.0.0.210:8080/api/lesson/"+lessonId+"/assignment")
+            .then(response => (response.json()))
+            .then(assignments => this.setState({assignments}))
     }
 
     addExam(){
         let newExam={
             title:"New Exam",
-            name:"New Exam"
+            name:"New Exam",
+            widgetType:"Exam"
         }
 
         this.examService.createExam(this.state.lessonId,newExam)
             .then(response => (response.json()))
-            .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/exam")
-                .then(response => (response.json()).catch((function(error) {
-                    console.log(error.message)})))
-                .then(exams => this.setState({exams: exams}))))
+            .catch(function(error) {
+                console.log(error.message);
+            }).then(Alert.alert("New Exam added"))
+            .then(()=>this.refreshFunction())
     }
 
     deleteExam(examId){
         this.examService.deleteExam(examId)
             .then(response => (response.json()))
-            .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/exam")
-                .then(response => (response.json()).catch((function(error) {
-                    console.log(error.message)})))
-                .then(exams => this.setState({exams: exams}))))
-
+            .catch(function(error) {
+                console.log(error.message);
+            }).then(Alert.alert("Exam deleted"))
+            .then(()=>this.refreshFunction())
     }
 
     addAssignment(){
         let newAssignment={
             title:"New Assignment",
-            name:"New Assignment"
+            name:"New Assignment",
+            widgetType:"Assignment"
         }
         this.assignmentService.createAssignment(this.state.lessonId,newAssignment)
             .then(response => (response.json()))
-            .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/assignment")
-                .then(response => (response.json()).catch((function(error) {
-                    console.log(error.message)})))
-                .then(assignments => this.setState({assignments: assignments}))))
+            .catch(function(error) {
+                console.log(error.message);
+            }).then(Alert.alert("New Assignment added"))
+            .then(()=>this.refreshFunction())
 
     }
 
     deleteAssignment(assignmentId){
         this.assignmentService.deleteAssignment(assignmentId)
             .then(response => (response.json()))
-            .then(()=>(fetch("http://10.0.0.210:8080/api/lesson/"+this.state.lessonId+"/assignment")
-                .then(response => (response.json()).catch((function(error) {
-                    console.log(error.message)})))
-                .then(assignments => this.setState({assignments: assignments}))))
+            .catch(function(error) {
+                console.log(error.message);
+            }).then(Alert.alert("Assignment deleted"))
+            .then(()=>this.refreshFunction())
 
     }
     componentDidMount() {
@@ -93,7 +106,7 @@ class WidgetList extends Component {
                         <ListItem
                             onPress={() =>
                                 this.props.navigation
-                                    .navigate("ExamEditor", {examId: exam.id, title:exam.title, name:exam.name})}
+                                    .navigate("ExamEditor", {examId: exam.id, title:exam.title, name:exam.name, refresh:this.refreshFunction})}
                             key={index}
                             title={exam.name}
                             rightIcon={<Icon name='delete'
@@ -103,21 +116,21 @@ class WidgetList extends Component {
                         <ListItem
                             onPress={() =>
                                 this.props.navigation
-                                    .navigate("AssignmentEditor", {assignment : assignment})}
+                                    .navigate("AssignmentEditor", {assignment : assignment, refresh:this.refreshFunction})}
                             key={index}
                             title={assignment.title}
                             rightIcon={<Icon name='delete'
                                              onPress={() => this.deleteAssignment(assignment.id)}/>}/>))}
+                <Text>{"\n"}</Text>
                 <Button	backgroundColor="blue"
                            onPress={()=>this.addExam()}
                            color="white"
                            title="Add Exam"/>
+                <Text>{"\n"}</Text>
                 <Button	backgroundColor="blue"
                            onPress={()=>this.addAssignment()}
                            color="white"
                            title="Add Assignment"/>
-                <Text>length:{this.state.exams.length}</Text>
-                <Text>length:{this.state.assignments.length}</Text>
             </ScrollView>
         )
     }

@@ -19,7 +19,7 @@ export default class TrueFalseService {
         let newTrueFalseQuestion={
             title: "New TrueFalse Question",
             type: "TrueFalse",
-            isTrue: false}
+            isTrue:'0'}
 
         return fetch(TFQUESTION_API_URL.replace('EID', examId),
             {

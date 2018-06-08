@@ -30,7 +30,7 @@ class MultipleChoiceQuestionEditor extends React.Component {
             title: question.title,
             subtitle: question.subtitle,
             points: question.points,
-            options: question.options,
+            options:question.options,
             correctOption:question.correctOption
         })
     }
@@ -48,6 +48,9 @@ class MultipleChoiceQuestionEditor extends React.Component {
         }
         this.multipleChoiceService.updateMCQuestion(this.state.question.id, newQuestion)
             .then(Alert.alert("Multiple Choice Question Updated"))
+            .then(()=>this.props.navigation.state.params.refresh())
+            .then(()=>this.props.navigation.goBack())
+
 
     }
     render() {
@@ -63,39 +66,54 @@ class MultipleChoiceQuestionEditor extends React.Component {
                 <FormInput value={this.state.title} onChangeText={
                     text => this.updateForm({title: text})
                 }/>
+                    {this.state.title === "" &&
                 <FormValidationMessage>
                     Title is required
-                </FormValidationMessage>
+                </FormValidationMessage>}
 
                 <FormLabel>Description</FormLabel>
                 <FormInput value={this.state.subtitle} onChangeText={
                     text => this.updateForm({subtitle: text})
                 }/>
+                    {this.state.subtitle === "" &&
                 <FormValidationMessage>
                     Description is required
-                </FormValidationMessage>
+                </FormValidationMessage>}
 
 
                 <FormLabel>Points</FormLabel>
                 <FormInput value={this.state.points.toString()} onChangeText={
                     text => this.updateForm({points: text})
                 }/>
+                    {this.state.points === "" &&
+                    <FormValidationMessage>
+                        Points is required
+                    </FormValidationMessage>}
+
+                    <FormLabel>Options</FormLabel>
+                    <FormInput value={this.state.options} onChangeText={
+                        text => this.updateForm({options: text})
+                    }/>
+                    {this.state.options === "" &&
+                    <FormValidationMessage>
+                        Options required
+                    </FormValidationMessage>}
+
+                    <FormLabel>Correct Option</FormLabel>
+                    <FormInput value={this.state.correctOption} onChangeText={
+                        text => this.updateForm({correctOption: text})
+                    }/>
+                    {this.state.correctOption === "" &&
+                    <FormValidationMessage>
+                        Correct Option is required
+                    </FormValidationMessage>}
 
 
-                    <FormLabel>Choices</FormLabel>
-                <FormInput value={this.state.choices} onChangeText={
-                    text => this.updateForm({options: text})
-                }/>
-
-                <FormLabel>Correct Option</FormLabel>
-                <FormInput value={this.state.correctOption.toString()} onChangeText={
-                    text => this.updateForm({correctOption: text})
-                }/>
-
-                <Button	backgroundColor="green"
+                    <Button	backgroundColor="green"
                            onPress={()=>this.updateQuestion()}
                            color="white"
                            title="Save"/>
+                    <Text>{"\n"}</Text>
                 <Button	backgroundColor="red"
                            color="white"
                            title="Cancel"/>
@@ -104,9 +122,15 @@ class MultipleChoiceQuestionEditor extends React.Component {
                 <Text h3>Preview</Text>
                 <Text h2>{this.state.title}</Text>
                 <Text>{this.state.subtitle}</Text>
-
-
-            </View>
+                    <Text>{"\n"}</Text>
+                    <Button	backgroundColor="red"
+                               color="white"
+                               title="Cancel"/>
+                    <Text>{"\n"}</Text>
+                    <Button	backgroundColor="blue"
+                               color="white"
+                               title="Submit"/>
+                </View>
             </ScrollView>
         )
     }

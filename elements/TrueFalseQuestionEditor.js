@@ -15,7 +15,7 @@ class TrueFalseQuestionEditor extends React.Component {
       title: '',
       subtitle: '',
       points: 0,
-      isTrue: false,
+      isTrue: '0',
       preview:false,
       radio_props : [
         {label: 'True', value: 0 },
@@ -49,6 +49,9 @@ class TrueFalseQuestionEditor extends React.Component {
     }
     this.TrueFalseService.updateTrueFalseQuestion(this.state.question.id, newQuestion)
                            .then(Alert.alert("TrueFalse Question Updated"))
+                             .then(()=>this.props.navigation.state.params.refresh())
+                             .then(()=>this.props.navigation.goBack())
+
 
   }
   render() {
@@ -64,45 +67,53 @@ class TrueFalseQuestionEditor extends React.Component {
         <FormInput value={this.state.title} onChangeText={
           text => this.updateForm({title: text})
         }/>
+        {this.state.title === "" &&
         <FormValidationMessage>
           Title is required
-        </FormValidationMessage>
+        </FormValidationMessage>}
 
-        <FormLabel>Description</FormLabel>
+       <FormLabel>Description</FormLabel>
         <FormInput value={this.state.subtitle} onChangeText={
-          text => this.updateForm({subtitle: text})
+            text => this.updateForm({subtitle: text})
         }/>
+            {this.state.subtitle === "" &&
         <FormValidationMessage>
-          Description is required
-        </FormValidationMessage>
+            Description is required
+        </FormValidationMessage>}
 
         <FormLabel>Points</FormLabel>
         <FormInput value={this.state.points.toString()} onChangeText={
             text => this.updateForm({points: text})
         }/>
+                {this.state.points === "" &&
+                <FormValidationMessage>
+                 Points are required
+                </FormValidationMessage>}
 
-        <CheckBox onPress={() => this.updateForm({isTrue: !this.state.isTrue})}
-                  checked={this.state.isTrue} title='The answer is true'/>
-
+        <Text>{"\n"}</Text>
+        <CheckBox onPress={() => this.updateForm(this.state.isTrue==='1'? {isTrue:'0'} : {isTrue:'1'} )}
+                  checked={(this.state.isTrue==='1'? true : false )} title='The answer is true'/>
+         <Text>{"\n"}</Text>
         <Button	backgroundColor="green"
                  onPress={()=>this.updateQuestion()}
                  color="white"
                  title="Save"/>
+                 <Text>{"\n"}</Text>
         <Button	backgroundColor="red"
                  color="white"
                  title="Cancel"/>
+                 <Text>{"\n"}</Text>
      </ScrollView>}
             <View>
         <Text h3>Preview</Text>
         <Text h2>{this.state.title}</Text>
         <Text>{this.state.subtitle}</Text>
-         <RadioForm
-                  radio_props={this.state.radio_props}
-                  initial={0}
-                />
+         <RadioForm radio_props={this.state.radio_props} initial={0}/>
+                <Text>{"\n"}</Text>
         <Button	backgroundColor="red"
                    color="white"
                    title="Cancel"/>
+                   <Text>{"\n"}</Text>
         <Button	backgroundColor="blue"
                    color="white"
                    title="Submit"/>

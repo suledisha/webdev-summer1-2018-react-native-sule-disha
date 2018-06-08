@@ -38,4 +38,10 @@ export default class QuestionService {
         }
     }
 
+    deleteQuestion(questionId){
+        return fetch(QUESTION_URL2.replace('QID',questionId), {
+            method: 'delete'
+        })
+    }
+
 }
